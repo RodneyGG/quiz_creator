@@ -8,7 +8,12 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import pyfiglet
 
+def display_welcome():
+    welcome_text = pyfiglet.figlet_format("Welcome to Quiz Maker!")
+    print(welcome_text)
+    
 #check for duplicate questions
 def is_question_duplicate(filename, question):
     with open(filename, "r") as file:
@@ -36,7 +41,7 @@ def ask_quit(filename):
         elif ask_user == "0":
             return False
         else:
-            print("Invalid Input")
+            print("Invalid Input\n")
 
 #select or create a new file         
 def select_file():
@@ -47,7 +52,7 @@ def select_file():
             if os.path.exists(filename):
                 return filename  
             else:
-                print(f"The file {filename} doesn't exist. Please try again.")
+                print(f"The file {filename} doesn't exist. Please try again.\n")
         elif choice == "2":
             #Ask the user what subject or topic the question will he or she be making
             topic = input("Enter the Subject or Topic of the question: ").strip().lower()
@@ -58,12 +63,12 @@ def select_file():
                     open(filename, "x")
                     break
                 except FileExistsError:
-                    print(f"The file '{filename}' already exists.")
+                    print(f"The file '{filename}' already exists.\n")
                     new_filename = input("Please enter a new filename: ").strip()
                     filename = new_filename + "_questions.txt"
             return filename  
         else:
-            print("Invalid choice, please enter 1 or 2 only.")
+            print("Invalid choice, please enter 1 or 2 only.\n")
             
 def send_email(filename):
     sender_email = "quizmakeroop@gmail.com"
@@ -79,7 +84,7 @@ def send_email(filename):
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
-    message["Subject"] = "Quiz Questions from Your Program"
+    message["Subject"] = "Quiz"
 
     #questions and answer will be printed in the mail
     body = f"Here are the questions from your quiz program:\n\n{quiz_content}"
@@ -94,9 +99,11 @@ def send_email(filename):
     except Exception as e:
         print(f"Error: {e}")
 
+#display welcome text
+display_welcome()
+
 #Make a filename named "{Topic or subject}_questions.txt" to store the question and make it in snake case
 filename = select_file()
-
 
 #Initailize quiz maker to true to run the program if its false the loop break
 quiz_maker = True
