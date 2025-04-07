@@ -5,6 +5,9 @@ the correct answer. Write the collected data to a text file. Ask another questio
 to exit.
 """
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 #check for duplicate questions
 def is_question_duplicate(filename, question):
@@ -20,14 +23,16 @@ def view_questions(filename):
         print(file.read())
 
 #ask the user to quit
-def ask_quit():
+def ask_quit(filename):
     while True:
         ask_user = input("Do you want to exit the program?\nType Only The Number\
-            \n1.Add More Question\n2.View the Question\n0.Exit\n").strip()
+            \n1.Add More Question\n2.View the Question\n3.Send question to email\n0.Exit\n").strip()
         if ask_user == "1":
             return True
         elif ask_user == "2":
-            view_questions()
+            view_questions(filename)
+        elif ask_user == "3":
+            send_email(filename)
         elif ask_user == "0":
             return False
         else:
@@ -59,6 +64,35 @@ def select_file():
             return filename  
         else:
             print("Invalid choice, please enter 1 or 2 only.")
+            
+def send_email(filename):
+    sender_email = "quizmakeroop@gmail.com"
+    password = "toae vefn frlq balq"  
+    receiver_email = input("Enter the recipient's email address: ")
+
+    #thankyou stackoverflow
+    #read the content of the file
+    with open(filename, "r") as file:
+        quiz_content = file.read()
+
+    #Set up the MIME
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = "Quiz Questions from Your Program"
+
+    #questions and answer will be printed in the mail
+    body = f"Here are the questions from your quiz program:\n\n{quiz_content}"
+    message.attach(MIMEText(body, "plain"))
+
+    #connect to the gmail SMTP server and send the email 
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+            print("Email sent successfully!\n")
+    except Exception as e:
+        print(f"Error: {e}")
 
 #Make a filename named "{Topic or subject}_questions.txt" to store the question and make it in snake case
 filename = select_file()
@@ -97,4 +131,4 @@ while quiz_maker:
         print(f"\nThis question already is already in {filename}\n!")
     
     #ask the user again to input a question or quit the program
-    quiz_maker = ask_quit()
+    quiz_maker = ask_quit(filename)
