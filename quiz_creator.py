@@ -4,6 +4,7 @@ Create a program that ask user for a question, it will also ask for 4 possible a
 the correct answer. Write the collected data to a text file. Ask another question until the user chose 
 to exit.
 """
+import os
 
 #view the questions
 def view_questions():
@@ -25,23 +26,35 @@ def ask_quit():
         else:
             print("Invalid Input")
 
-
-#Ask the user what subject or topic the question will he or she be making
-print("The topic or subject will be the filename")
-topic = input("Enter the Subject or the Topic of the question: ").strip().lower()
+#select or create a new file         
+def select_file():
+    while True:
+        choice = input("Do you want to:\n1. Open an existing file\n2. Create a new file\nEnter 1 or 2: ").strip()
+        if choice == "1":
+            filename = input("Enter the filename to open (e.g., topic_questions.txt): ").strip()
+            if os.path.exists(filename):
+                return filename  
+            else:
+                print(f"The file {filename} doesn't exist. Please try again.")
+        elif choice == "2":
+            #Ask the user what subject or topic the question will he or she be making
+            topic = input("Enter the Subject or Topic of the question: ").strip().lower()
+            filename = f"{topic}_questions.txt"
+            #check if filename is already exists
+            while True:
+                try:
+                    open(filename, "x")
+                    break
+                except FileExistsError:
+                    print(f"The file '{filename}' already exists.")
+                    new_filename = input("Please enter a new filename: ").strip()
+                    filename = new_filename + "_questions.txt"
+            return filename  
+        else:
+            print("Invalid choice, please enter 1 or 2 only.")
 
 #Make a filename named "{Topic or subject}_questions.txt" to store the question and make it in snake case
-filename = f"{topic}_questions.txt"
-
-#check if filename is already exists
-while True:
-    try:
-        open(filename, "x")
-        break
-    except FileExistsError:
-        print(f"The file '{filename}' already exists.")
-        new_filename = input("Please enter a new filename: ").strip()
-        filename = new_filename + "_questions.txt"
+filename = select_file()
 
 
 #Initailize quiz maker to true to run the program if its false the loop break
