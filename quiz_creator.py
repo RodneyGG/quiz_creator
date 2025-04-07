@@ -6,8 +6,15 @@ to exit.
 """
 import os
 
+#check for duplicate questions
+def is_question_duplicate(filename, question):
+    with open(filename, "r") as file:
+        contents = file.read()
+        return f"Question: {question}" in contents
+
+
 #view the questions
-def view_questions():
+def view_questions(filename):
     with open(filename, "r") as file:
         print(f"These are the question inside {filename}")
         print(file.read())
@@ -62,29 +69,32 @@ quiz_maker = True
 
 while quiz_maker:
     #Ask the user to input a question
-    question = input("\nEnter your question: ")
+    question = input("\nEnter your question: ").strip()
     
     #input choices for A, B, C, D
-    choice_a = input("Enter choice A: ")
-    choice_b = input("Enter choice B: ")
-    choice_c = input("Enter choice C: ")
-    choice_d = input("Enter choice D: ")
+    choice_a = input("Enter choice A: ").strip()
+    choice_b = input("Enter choice B: ").strip()
+    choice_c = input("Enter choice C: ").strip()
+    choice_d = input("Enter choice D: ").strip()
     
     #select what is the correct answer
     correct = ""
     while correct not in ['a', 'b', 'c', 'd']:
-        correct = input("Which is the correct answer? (a/b/c/d): ").lower()
+        correct = input("Which is the correct answer? (a/b/c/d): ").lower().strip()
         if correct not in ['a', 'b', 'c', 'd']:
             print("Invalid choice, please select a, b, c, or d")
     
     #All of the input of the user will be stored in a text file created
-    with open(filename, "a") as file:
-        file.write(f"Question: {question}\n")
-        file.write(f"  a) {choice_a}\n")
-        file.write(f"  b) {choice_b}\n")
-        file.write(f"  c) {choice_c}\n")
-        file.write(f"  d) {choice_d}\n")
-        file.write(f"Answer: {correct}\n\n")
+    if not is_question_duplicate(filename, question):
+        with open(filename, "a") as file:
+            file.write(f"Question: {question}\n")
+            file.write(f"a) {choice_a}\n")
+            file.write(f"b) {choice_b}\n")
+            file.write(f"c) {choice_c}\n")
+            file.write(f"d) {choice_d}\n")
+            file.write(f"Answer: {correct}\n\n")
+    else:
+        print(f"\nThis question already is already in {filename}\n!")
     
     #ask the user again to input a question or quit the program
     quiz_maker = ask_quit()
