@@ -27,10 +27,22 @@ def ask_quit():
 
 
 #Ask the user what subject or topic the question will he or she be making
+print("The topic or subject will be the filename")
 topic = input("Enter the Subject or the Topic of the question: ").strip().lower()
 
 #Make a filename named "{Topic or subject}_questions.txt" to store the question and make it in snake case
 filename = f"{topic}_questions.txt"
+
+#check if filename is already exists
+while True:
+    try:
+        open(filename, "x")
+        break
+    except FileExistsError:
+        print(f"The file '{filename}' already exists.")
+        new_filename = input("Please enter a new filename: ").strip()
+        filename = new_filename + "_questions.txt"
+
 
 #Initailize quiz maker to true to run the program if its false the loop break
 quiz_maker = True
