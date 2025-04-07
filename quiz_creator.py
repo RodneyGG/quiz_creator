@@ -5,12 +5,21 @@ the correct answer. Write the collected data to a text file. Ask another questio
 to exit.
 """
 
+#view the questions
+def view_questions():
+    with open(filename, "r") as file:
+        print(f"These are the question inside {filename}")
+        print(file.read())
+
+#ask the user to quit
 def ask_quit():
     while True:
         ask_user = input("Do you want to exit the program?\nType Only The Number\
-            \n1. Add More Question\n0.Exit").strip()
+            \n1.Add More Question\n2.View the Question\n0.Exit\n").strip()
         if ask_user == "1":
             return True
+        elif ask_user == "2":
+            view_questions()
         elif ask_user == "0":
             return False
         else:
@@ -50,7 +59,7 @@ while quiz_maker:
         file.write(f"  b) {choice_b}\n")
         file.write(f"  c) {choice_c}\n")
         file.write(f"  d) {choice_d}\n")
-        file.write(f"Answer: {correct}\n")
+        file.write(f"Answer: {correct}\n\n")
     
     #ask the user again to input a question or quit the program
     quiz_maker = ask_quit()
