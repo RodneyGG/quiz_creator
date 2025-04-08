@@ -9,6 +9,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pyfiglet
+import time
 
 def display_welcome():
     welcome_text = pyfiglet.figlet_format("Welcome to Quiz Maker!")
@@ -73,18 +74,21 @@ def select_file():
 def send_email(filename):
     sender_email = "quizmakeroop@gmail.com"
     password = "toae vefn frlq balq"  
-    receiver_email = input("Enter the recipient's email address: ")
+    receiver_email = input("Enter the recipient's email address: ").strip()
 
     #thankyou stackoverflow
     #read the content of the file
     with open(filename, "r") as file:
         quiz_content = file.read()
 
+    # Get current time as a formatted string
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    
     #Set up the MIME
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
-    message["Subject"] = "Quiz"
+    message["Subject"] = f"Quiz Maker: {filename} is sent on {current_time}"
 
     #questions and answer will be printed in the mail
     body = f"Here are the questions from your quiz program:\n\n{quiz_content}"
