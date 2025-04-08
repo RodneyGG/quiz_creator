@@ -100,8 +100,8 @@ def send_email(filename):
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, message.as_string())
             print("Email sent successfully!\n")
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception as email_error:
+        print(f"Error: {email_error}")
 
 #display welcome text
 display_welcome()
@@ -127,7 +127,7 @@ while quiz_maker:
     while correct not in ['a', 'b', 'c', 'd']:
         correct = input("Which is the correct answer? (a/b/c/d): ").lower().strip()
         if correct not in ['a', 'b', 'c', 'd']:
-            print("Invalid choice, please select a, b, c, or d")
+            print("Invalid choice, please select a, b, c, or d\n")
     
     #All of the input of the user will be stored in a text file created
     if not is_question_duplicate(filename, question):
