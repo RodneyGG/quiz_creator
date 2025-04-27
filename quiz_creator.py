@@ -27,7 +27,7 @@ def is_question_duplicate(filename, question):
 
     #loop the the question to find duplicate
     for question in contents:
-        if question['question'].lower() == new_question.lower():
+        if question['question'].lower() == question.lower():
             return True  # Duplicate found
     #return false when question not found
     return False  
@@ -91,7 +91,7 @@ def send_email(filename):
     #thankyou stackoverflow
     #read the content of the file
     with open(filename, "r") as file:
-        quiz_content = file.read()
+        quiz_content = json.load(file)
 
     # Get current time as a formatted string
     current_time = time.strftime("%Y-%m-%d %H:%M:%S")
