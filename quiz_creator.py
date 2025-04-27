@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pyfiglet
 import time
+import json
 
 def display_welcome():
     welcome_text = pyfiglet.figlet_format("Welcome to Quiz Maker!")
@@ -17,16 +18,27 @@ def display_welcome():
     
 #check for duplicate questions
 def is_question_duplicate(filename, question):
-    with open(filename, "r") as file:
-        contents = file.read()
-        return f"Question: {question}" in contents
+    #Check if the file exists and is not empty
+    try:
+        with open(filename, "r") as file:
+            contents = json.load(file) 
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False
+
+    #loop the the question to find duplicate
+    for question in contents:
+        if question['question'].lower() == new_question.lower():
+            return True  # Duplicate found
+    #return false when question not found
+    return False  
 
 
 #view the questions
 def view_questions(filename):
     with open(filename, "r") as file:
         print(f"These are the question inside {filename}")
-        print(file.read())
+        all_questions = json.load(file)  
+    return all_questions
 
 #ask the user to quit
 def ask_quit(filename):
@@ -117,27 +129,32 @@ while quiz_maker:
     question = input("\nEnter your question: ").strip()
     
     #input choices for A, B, C, D
-    choice_a = input("Enter choice A: ").strip()
-    choice_b = input("Enter choice B: ").strip()
-    choice_c = input("Enter choice C: ").strip()
-    choice_d = input("Enter choice D: ").strip()
+    choice_1 = input("Enter choice 1: ").strip()
+    choice_2 = input("Enter choice 2: ").strip()
+    choice_3 = input("Enter choice 3: ").strip()
+    choice_4 = input("Enter choice 4: ").strip()
     
     #select what is the correct answer
     correct = ""
-    while correct not in ['a', 'b', 'c', 'd']:
-        correct = input("Which is the correct answer? (a/b/c/d): ").lower().strip()
-        if correct not in ['a', 'b', 'c', 'd']:
-            print("Invalid choice, please select a, b, c, or d\n")
+    while correct not in ['1', '2', '3', '4']:
+        correct = input("Which is the correct answer? (1/2/3/4): ").lower().strip()
+        
+        questions_format = {
+            "question": question,
+            "choices": [choice_1, 
+                    choice_2, 
+                    choice_3, 
+                    choice_4],
+            "answer": correct
+                            }
+        
+        if correct not in ['1', '2', '3', '4']:
+            print("Invalid choice, please select 1, 2, 3, 4\n")
     
     #All of the input of the user will be stored in a text file created
     if not is_question_duplicate(filename, question):
         with open(filename, "a") as file:
-            file.write(f"Question: {question}\n")
-            file.write(f"a) {choice_a}\n")
-            file.write(f"b) {choice_b}\n")
-            file.write(f"c) {choice_c}\n")
-            file.write(f"d) {choice_d}\n")
-            file.write(f"Answer: {correct}\n\n")
+            file.write(json.dumps(questions_format) + "\n")
     else:
         print(f"\nThis question already is already in {filename}\n!")
     
