@@ -76,6 +76,7 @@ def select_file():
             topic_name = input("Enter the filename to open (e.g., math): ").strip()
             filename = topic_name + "_questions.txt"
             if os.path.exists(filename):
+                view_questions(filename)
                 return filename  
             else:
                 print(f"The file {filename} doesn't exist. Please try again.\n")

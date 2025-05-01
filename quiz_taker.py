@@ -114,7 +114,17 @@ def send_email(name, email, score, total, quiz_log, filename):
         print("Email sent successfully!")
     except Exception as error:
         print(f"Failed to send email: {error}")
-        
+
+def ask_quit():
+    while True:
+        ask_user = input("Do you wish to exit the Quiz Taker (Y/N)?\n").lower()
+        if ask_user in ("y", "yes"):
+            return False
+        elif ask_user in ("n", "no"):
+            return True
+        else:
+            print("Invalid Input. Only Y/N")
+
 #welcome the users
 display_welcome()
 
@@ -139,3 +149,6 @@ while quiz_taker:
     
     #Send the Result to desired email
     send_email(full_name, email, score, total, quiz_log, filename)
+    
+    #ask the user to quit
+    quiz_taker = ask_quit()
