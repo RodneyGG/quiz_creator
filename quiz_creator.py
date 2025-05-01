@@ -73,7 +73,8 @@ def select_file():
     while True:
         choice = input("Do you want to:\n1. Open an existing file\n2. Create a new file\nEnter 1 or 2: ").strip()
         if choice == "1":
-            filename = input("Enter the filename to open (e.g., topic_questions.txt): ").strip()
+            topic_name = input("Enter the filename to open (e.g., math): ").strip()
+            filename = topic_name + "_questions.txt"
             if os.path.exists(filename):
                 return filename  
             else:
