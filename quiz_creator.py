@@ -20,25 +20,37 @@ def display_welcome():
 def is_question_duplicate(filename, question):
     #Check if the file exists and is not empty
     try:
-        with open(filename, "r") as file:
-            contents = json.load(file) 
+        with open(filename, "r", encoding="utf-8") as file:
+            #loop the the question to find duplicate
+            for line in file:
+                line = line.strip()
+                if line:
+                    saved_question = json.loads(line)
+                    if saved_question["question"].lower() == question.lower():
+                        return True # Duplicate found
+            return False#return false when question not found
+        
     except (FileNotFoundError, json.JSONDecodeError):
         return False
-
-    #loop the the question to find duplicate
-    for question in contents:
-        if question['question'].lower() == question.lower():
-            return True  # Duplicate found
-    #return false when question not found
-    return False  
-
-
+    
+            
 #view the questions
 def view_questions(filename):
-    with open(filename, "r") as file:
-        print(f"These are the question inside {filename}")
-        all_questions = json.load(file)  
-    return all_questions
+    with open(filename, "r", encoding="utf-8") as file:
+        print(f"These are the questions inside {filename}")
+
+        for line_number, line in enumerate(file, 1): 
+            line = line.strip()
+            if line: 
+                print(f"Line {line_number}: {line}")  
+                data = json.loads(line) 
+                
+                print("Question:", data["question"])
+                
+                for i, choice in enumerate(data["choices"], 1):
+                    print(f"  choice_{i}: {choice}")
+                print("Answer:", data["answer"])
+                print("-" * 40)
 
 #ask the user to quit
 def ask_quit(filename):
@@ -90,6 +102,7 @@ def send_email(filename):
 
     #thankyou stackoverflow
     #read the content of the file
+
     with open(filename, "r") as file:
         quiz_content = json.load(file)
 
@@ -101,9 +114,20 @@ def send_email(filename):
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = f"Quiz Maker: {filename} is sent on {current_time}"
-
+    
+    formatted_content = ""
+    
+    for data in quiz_content:
+        question_text = f"Question: {data["question"]}\n"
+        choices_text = ""
+        for i, choice in enumerate(data["choices"], 1):
+            choices_text += f"  choice_{i}: {choice}\n"
+        answer_text = f"Answer: {data['answer']}\n"
+    
+        formatted_content += question_text + choices_text + "\n" + answer_text + "\n"
+    
     #questions and answer will be printed in the mail
-    body = f"Here are the questions from your quiz program:\n\n{quiz_content}"
+    body = f"Here are the questions from your quiz program:\n\n{formatted_content}"
     message.attach(MIMEText(body, "plain"))
 
     #connect to the gmail SMTP server and send the email 
@@ -137,7 +161,7 @@ while quiz_maker:
     #select what is the correct answer
     correct = ""
     while correct not in ['1', '2', '3', '4']:
-        correct = input("Which is the correct answer? (1/2/3/4): ").lower().strip()
+        correct = input("Which is the correct answer? (1/2/3/4): \n").lower().strip()
         
         questions_format = {
             "question": question,
@@ -145,7 +169,7 @@ while quiz_maker:
                     choice_2, 
                     choice_3, 
                     choice_4],
-            "answer": correct
+            "answer": f"choice_{correct}"
                             }
         
         if correct not in ['1', '2', '3', '4']:
