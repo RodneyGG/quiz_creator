@@ -43,6 +43,7 @@ def load_questions(filename):
 def ask_questions(questions):
     #It will then start a quiz and set the score to 0.
     score = 0
+    quiz_log = ""
     
     #the program will randomize the order of the question
     random.shuffle(questions)
@@ -78,8 +79,17 @@ def ask_questions(questions):
             score += 1
         else:
             print(f" Incorrect. Correct answer: {correct_choice}")
+            
+        quiz_log += f"Q{item}: {question["question"]}\n"
+        for label, choice in labeled_choices.items():
+            is_correct = "" 
+            if choice == correct_choice:
+                is_correct += "✅"
+            quiz_log += f"    {label}. {choice}{is_correct}\n"
+        
+        quiz_log += f"Your answer: {answer}. {user_choice}\n\n"
     
-    return score 
+    return score, quiz_log
             
 
 #welcome the users
@@ -95,4 +105,7 @@ while quiz_taker:
     
     questions = load_questions(filename)
     
-    score = ask_questions(questions)
+    score, quiz_log = ask_questions(questions)
+    
+    print(f"Your Score is :{score}/{len(questions)}")
+    print(quiz_log)
