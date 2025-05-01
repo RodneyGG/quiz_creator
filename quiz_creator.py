@@ -42,7 +42,6 @@ def view_questions(filename):
         for line_number, line in enumerate(file, 1): 
             line = line.strip()
             if line: 
-                print(f"Line {line_number}: {line}")  
                 data = json.loads(line) 
                 
                 print("Question:", data["question"])
@@ -51,6 +50,7 @@ def view_questions(filename):
                     print(f"  choice_{i}: {choice}")
                 print("Answer:", data["answer"])
                 print("-" * 40)
+
 
 #ask the user to quit
 def ask_quit(filename):
@@ -102,9 +102,21 @@ def send_email(filename):
 
     #thankyou stackoverflow
     #read the content of the file
-
-    with open(filename, "r") as file:
-        quiz_content = json.load(file)
+    
+    formatted_content = ""
+    
+    with open(filename, "r", encoding="utf-8") as file:
+        for line in file:
+            if line:  
+                data = json.loads(line)
+                # Format the question and choices
+                question_text = f"Question: {data['question']}\n"
+                choices_text = ""
+                for i, choice in enumerate(data["choices"], 1):
+                    choices_text += f"  choice_{i}: {choice}\n"
+                answer_text = f"Answer: {data['answer']}\n"
+                        
+                formatted_content += question_text + choices_text + "\n" + answer_text + "\n"
 
     # Get current time as a formatted string
     current_time = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -114,17 +126,6 @@ def send_email(filename):
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = f"Quiz Maker: {filename} is sent on {current_time}"
-    
-    formatted_content = ""
-    
-    for data in quiz_content:
-        question_text = f"Question: {data["question"]}\n"
-        choices_text = ""
-        for i, choice in enumerate(data["choices"], 1):
-            choices_text += f"  choice_{i}: {choice}\n"
-        answer_text = f"Answer: {data['answer']}\n"
-    
-        formatted_content += question_text + choices_text + "\n" + answer_text + "\n"
     
     #questions and answer will be printed in the mail
     body = f"Here are the questions from your quiz program:\n\n{formatted_content}"
