@@ -73,6 +73,7 @@ def select_file():
     while True:
         choice = input("Do you want to:\n1. Open an existing file\n2. Create a new file\nEnter 1 or 2: ").strip()
         if choice == "1":
+            list_quiz_files()
             topic_name = input("Enter the filename to open (e.g., math): ").strip()
             filename = topic_name + "_questions.txt"
             if os.path.exists(filename):
@@ -141,6 +142,14 @@ def send_email(filename):
             print("Email sent successfully!\n")
     except Exception as email_error:
         print(f"Error: {email_error}")
+        
+def list_quiz_files():
+    print("Available Quiz Files:")
+    for file in os.listdir():
+        if file.endswith("_questions.txt"):
+            topic = file.replace("_questions.txt", "")
+            print(f"{topic}")
+    print("-" * 30)
 
 #display welcome text
 display_welcome()

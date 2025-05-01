@@ -19,6 +19,7 @@ def display_welcome():
 
 #select the file
 def select_quiz():
+    list_quiz_files()
     topic_name = input("Enter the filename to open (e.g., math): ").strip()
     filename = topic_name + "_questions.txt"
     if os.path.exists(filename):
@@ -125,6 +126,13 @@ def ask_quit():
         else:
             print("Invalid Input. Only Y/N")
 
+def list_quiz_files():
+    print("Available Quiz Files:")
+    for file in os.listdir():
+        if file.endswith("_questions.txt"):
+            topic = file.replace("_questions.txt", "")
+            print(f"{topic}")
+    print("-" * 30)
 #welcome the users
 display_welcome()
 
