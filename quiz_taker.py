@@ -133,30 +133,32 @@ def list_quiz_files():
             topic = file.replace("_questions.txt", "")
             print(f"{topic}")
     print("-" * 30)
-#welcome the users
-display_welcome()
 
-quiz_taker = True
+def main():
+    #welcome the users
+    display_welcome()
 
-while quiz_taker:
-    #ask the user for the topic of the exam
-    filename = select_quiz()
-    print(filename)
-    #Ask the user for its full name 
-    full_name = input("Enter Name: ").strip()
-    #ask for the quiz taker email and 
-    email = input("Enter Email: ").strip()                                                                           
-    
-    questions = load_questions(filename)
-    
-    score, quiz_log = ask_questions(questions)
-    total = len(questions)
-    #print the score of the quiz taker
-    print(f"Your Score is :{score}/{total}")
-    print(quiz_log)
-    
-    #Send the Result to desired email
-    send_email(full_name, email, score, total, quiz_log, filename)
-    
-    #ask the user to quit
-    quiz_taker = ask_quit()
+    quiz_taker = True
+
+    while quiz_taker:
+        #ask the user for the topic of the exam
+        filename = select_quiz()
+        print(filename)
+        #Ask the user for its full name 
+        full_name = input("Enter Name: ").strip()
+        #ask for the quiz taker email and 
+        email = input("Enter Email: ").strip()                                                                           
+        
+        questions = load_questions(filename)
+        
+        score, quiz_log = ask_questions(questions)
+        total = len(questions)
+        #print the score of the quiz taker
+        print(f"Your Score is :{score}/{total}")
+        print(quiz_log)
+        
+        #Send the Result to desired email
+        send_email(full_name, email, score, total, quiz_log, filename)
+        
+        #ask the user to quit
+        quiz_taker = ask_quit()

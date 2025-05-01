@@ -150,49 +150,49 @@ def list_quiz_files():
             topic = file.replace("_questions.txt", "")
             print(f"{topic}")
     print("-" * 30)
+def main():
+    #display welcome text
+    display_welcome()
 
-#display welcome text
-display_welcome()
+    #Make a filename named "{Topic or subject}_questions.txt" to store the question and make it in snake case
+    filename = select_file()
 
-#Make a filename named "{Topic or subject}_questions.txt" to store the question and make it in snake case
-filename = select_file()
+    #Initailize quiz maker to true to run the program if its false the loop break
+    quiz_maker = True
 
-#Initailize quiz maker to true to run the program if its false the loop break
-quiz_maker = True
-
-while quiz_maker:
-    #Ask the user to input a question
-    question = input("\nEnter your question: ").strip()
-    
-    #input choices for A, B, C, D
-    choice_1 = input("Enter choice 1: ").strip()
-    choice_2 = input("Enter choice 2: ").strip()
-    choice_3 = input("Enter choice 3: ").strip()
-    choice_4 = input("Enter choice 4: ").strip()
-    
-    #select what is the correct answer
-    correct = ""
-    while correct not in ['1', '2', '3', '4']:
-        correct = input("Which is the correct answer? (1/2/3/4): \n").lower().strip()
+    while quiz_maker:
+        #Ask the user to input a question
+        question = input("\nEnter your question: ").strip()
         
-        questions_format = {
-            "question": question,
-            "choices": [choice_1, 
-                    choice_2, 
-                    choice_3, 
-                    choice_4],
-            "answer": f"choice_{correct}"
-                            }
+        #input choices for A, B, C, D
+        choice_1 = input("Enter choice 1: ").strip()
+        choice_2 = input("Enter choice 2: ").strip()
+        choice_3 = input("Enter choice 3: ").strip()
+        choice_4 = input("Enter choice 4: ").strip()
         
-        if correct not in ['1', '2', '3', '4']:
-            print("Invalid choice, please select 1, 2, 3, 4\n")
-    
-    #All of the input of the user will be stored in a text file created
-    if not is_question_duplicate(filename, question):
-        with open(filename, "a") as file:
-            file.write(json.dumps(questions_format) + "\n")
-    else:
-        print(f"\nThis question already is already in {filename}\n!")
-    
-    #ask the user again to input a question or quit the program
-    quiz_maker = ask_quit(filename)
+        #select what is the correct answer
+        correct = ""
+        while correct not in ['1', '2', '3', '4']:
+            correct = input("Which is the correct answer? (1/2/3/4): \n").lower().strip()
+            
+            questions_format = {
+                "question": question,
+                "choices": [choice_1, 
+                        choice_2, 
+                        choice_3, 
+                        choice_4],
+                "answer": f"choice_{correct}"
+                                }
+            
+            if correct not in ['1', '2', '3', '4']:
+                print("Invalid choice, please select 1, 2, 3, 4\n")
+        
+        #All of the input of the user will be stored in a text file created
+        if not is_question_duplicate(filename, question):
+            with open(filename, "a") as file:
+                file.write(json.dumps(questions_format) + "\n")
+        else:
+            print(f"\nThis question already is already in {filename}\n!")
+        
+        #ask the user again to input a question or quit the program
+        quiz_maker = ask_quit(filename)
