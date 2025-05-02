@@ -196,3 +196,6 @@ def main():
         
         #ask the user again to input a question or quit the program
         quiz_maker = ask_quit(filename)
+
+if __name__ == "__main__":
+    main()

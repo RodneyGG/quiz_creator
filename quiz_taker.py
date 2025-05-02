@@ -11,12 +11,17 @@ import pyfiglet
 import time
 import json
 import random
+from playsound import playsound
 
 #welcome the user 
 def display_welcome():
     welcome_text = pyfiglet.figlet_format("Welcome to Quiz Taker!")
     print(welcome_text)
 
+def quiz_start_sound():
+    sound_1 = 'sounds/lets_get_ready_to_rumble.mp3'
+    playsound(sound_1)
+    
 #select the file
 def select_quiz():
     list_quiz_files()
@@ -41,6 +46,8 @@ def ask_questions(questions):
     #It will then start a quiz and set the score to 0.
     score = 0
     quiz_log = ""
+    
+    quiz_start_sound()
     
     #the program will randomize the order of the question
     random.shuffle(questions)
@@ -143,7 +150,6 @@ def main():
     while quiz_taker:
         #ask the user for the topic of the exam
         filename = select_quiz()
-        print(filename)
         #Ask the user for its full name 
         full_name = input("Enter Name: ").strip()
         #ask for the quiz taker email and 
@@ -162,3 +168,6 @@ def main():
         
         #ask the user to quit
         quiz_taker = ask_quit()
+        
+if __name__ == "__main__":
+    main()
