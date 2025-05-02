@@ -64,5 +64,6 @@ The project uses the following Python libraries:
 - `smtplib` and `email` for sending emails.
 - `json` for handling quiz data.
 - `random` for randomizing questions and answers.
+- `playsound` for adding sound inside the code.
 
 Ensure you have Python 3.7+ installed and the required dependencies.
