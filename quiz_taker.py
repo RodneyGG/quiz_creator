@@ -24,13 +24,14 @@ def quiz_start_sound():
     
 #select the file
 def select_quiz():
-    list_quiz_files()
-    topic_name = input("Enter the filename to open (e.g., math): ").strip()
-    filename = topic_name + "_questions.txt"
-    if os.path.exists(filename):
-        return filename  
-    else:
-        print(f"The file {filename} doesn't exist. Please try again.\n")
+    while True:
+        list_quiz_files()
+        topic_name = input("Enter the filename to open (e.g., math): ").strip()
+        filename = topic_name + "_questions.txt"
+        if os.path.exists(filename):
+            return filename  
+        else:
+            print(f"The file {filename} doesn't exist. Please try again.\n")
 
 #the program will load the exam
 def load_questions(filename):
