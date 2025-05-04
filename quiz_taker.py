@@ -142,6 +142,9 @@ def list_quiz_files():
     print("-" * 30)
 
 def main():
+    #clear the command line 
+    os.system('cls')
+
     #welcome the users
     display_welcome()
 
